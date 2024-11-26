@@ -15,15 +15,25 @@ function createElement(type, config, ...children) {
   }
 
   // 做了兼容处理，如果是文本类型，返回元素对象
-  const newChildren = children.map((child) => {
+  const newChildren = children.reduce((total, child) => {
     // child是一个React.createElement返回的React元素
-    if (typeof child === "object") return child;
+    if (typeof child === "object") {
+      if (child instanceof Array) {
+        total.push(...child);
+      } else {
+        total.push(child);
+      }
+    }
     // child是字符串
-    return {
-      type: ELEMENT_TEXT,
-      props: { text: child, children: [] },
-    };
-  });
+    else {
+      total.push({
+        type: ELEMENT_TEXT,
+        props: { text: child, children: [] },
+      });
+    }
+    return total;
+  }, []);
+
   return {
     type,
     props: {

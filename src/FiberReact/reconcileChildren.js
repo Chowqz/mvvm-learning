@@ -16,6 +16,9 @@ import { UpdateQueue } from "./UpdateQueue";
  * @param {*} newChildren 当前节点的子节点，虚拟dom数组
  */
 export function reconcileChildren(currentFiber, newChildren, deletions) {
+  if (currentFiber.tag === TAG_FUNCTION_COMPONENT) {
+    console.log(newChildren);
+  }
   // console.log(currentFiber);
   let newChildIndex = 0; //新虚拟DOM数组中的索引
   // 老的父fiber的第一个子fiber
@@ -87,6 +90,8 @@ export function reconcileChildren(currentFiber, newChildren, deletions) {
       }
       if (oldFiber) {
         oldFiber.effectTag = DELETION;
+        console.log("delete:", oldFiber);
+        console.log("==");
         deletions.push(oldFiber);
       }
     }

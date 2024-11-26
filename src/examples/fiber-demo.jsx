@@ -3,71 +3,64 @@
 import React from "../FiberReact";
 import ReactDOM from "../FiberReact/react-dom";
 
-class Count4 extends React.Component {
+function Box(props) {
+  return (
+    <div>
+      {props.label}
+      {props.value}
+    </div>
+  );
+}
+
+class CountClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: 1,
+      count: 0,
     };
   }
 
   onClickHandler = () => {
     this.setState({
-      count: this.state.count + 1,
+      count: this.state.count + 2,
     });
   };
 
   render() {
     return (
       <div>
+        Count Class
         <h3>Count: {this.state.count}</h3>
-        <button onClick={this.onClickHandler}>Count+1</button>
+        <button onClick={this.onClickHandler}>Count+2</button>
       </div>
     );
   }
 }
 
-function Count3() {
-  const [count, setCount] = React.useState({
-    num: 1,
-  });
-
-  const onClickHandler = () => {
-    setCount((prev) => ({
-      num: prev.num * 2,
-    }));
-  };
-
-  return (
-    <div>
-      <h3>Count: {count.num}</h3>
-      <button onClick={onClickHandler}>Count * 2</button>
-    </div>
-  );
-}
-
-function Count() {
+function CountFunction() {
   const [count, setCount] = React.useState({ num: 0 });
-  const [count2, setCount2] = React.useState({ num: 0 });
+  const [boxList, setBoxList] = React.useState({ value: [] });
 
   const onClickHandler = () => {
     setCount((prev) => ({
       num: prev.num + 1,
     }));
-  };
-
-  const onClickHandler2 = () => {
-    setCount2((prev) => ({
-      num: prev.num + 2,
-    }));
+    setBoxList((prev) => {
+      prev.value.push(count.num + 1);
+      return {
+        value: [...prev.value],
+      };
+    });
   };
 
   return (
     <div>
-      <h3>Count1: {count.num}</h3>
-      <button onClick={onClickHandler}>Count1+1</button>
-      <h3>Count2: {count2.num}</h3>
-      <button onClick={onClickHandler2}>Count2+2</button>
+      Count Function
+      <h3>Count: {count.num}</h3>
+      <button onClick={onClickHandler}>Count+1</button>
+      {boxList.value.map((item, index) => {
+        return <Box key={index} label="Box:" value={index + 1} />;
+      })}
     </div>
   );
 }
@@ -77,18 +70,12 @@ function App(props) {
     <div>
       <h1 id="title">{props.title}</h1>
       <hr></hr>
-      <section>
-        <h2>Function component 1</h2>
-        <Count></Count>
-        <hr></hr>
-        <h2>Function component2</h2>
-        <Count3></Count3>
-        <hr></hr>
-        <h2>Class component</h2>
-        <Count4></Count4>
-      </section>
+      <CountClass />
+      <br />
+      <hr />
+      <CountFunction />
     </div>
   );
 }
 
-ReactDOM.render(<App title="Fiber Demo" />, document.getElementById("root"));
+ReactDOM.render(<App title="Fiber" />, document.getElementById("root"));
